@@ -46,5 +46,17 @@ describe("DI", () => {
     DI.useObject(A, B);
     const instance = DI.resolve(A);
     expect(instance).toBe(B);
+  });
+
+  test("multiple resolves returns the exact same object", () => {
+    const A = {};
+    const B = () => Math.random();
+    DI.useFactory(A, B);
+    const o1 = DI.resolve(A);
+    const o2 = DI.resolve(A);
+    const o3 = DI.resolve(A);
+
+    expect(o1).toBe(o2);
+    expect(o2).toBe(o3);
   })
 });
