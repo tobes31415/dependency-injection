@@ -7,27 +7,21 @@ A tiny library to handle basic dependency injection
     npm install --save @tobes31415/di
 
 # Basic Useage
-    import { onDispose, dispose } from "@tobes31415/dispose"
-    
-    onDispose(foo, () => {
-      //release resources
-      //disconnect from servers, etc
-    });
-    
-    dispose(foo);
+    import { DI } from "@tobes31415/dependency-injection";
+    import { SomeService } from "./someService";
+
+    class SomeClass {
+        constructor() {
+            this.service = DI.resolve(SomeService);
+        }
+    }
 
 # Advanced Useage
-    import { isDisposed, assertNotDisposed, createDisposeableFunctionWrapper, dispose } from "@tobes31415/dispose"
+    DI.useClass(Potato, Carrot);
+    const obj = DI.resolve(Potato) // instance of Carrot
     
-    if (isDisposed(foo)) {
-        foo = new Foo();
-    }
+    DI.useObject(Potato, {banana});
+    const obj = DI.resolve(Potato) // {banana}
     
-    assertNotDisposed(bar); //throws exception if bar has been disposed
-    
-    const baz = createDisposeableFunctionWrapper( (a,b,c) => a * b + c );
-    baz(1,2,3) //outputs 5
-    
-    dispose(baz);
-    baz(1,2,3) // throws an exception
-    
+    DI.useFactory(Potato, () => 123);
+    const obj = DI.resolve(Potato) //123
