@@ -1,0 +1,60 @@
+{
+  "name": "@tobes31415/dependency-injection",
+  "version": "1.0.0",
+  "description": "Tiny dependency injection",
+  "main": "lib/di.min.js",
+  "types": "lib/di.d.ts",
+  "scripts": {
+    "test": "npm run build:compile:quick && npm run test:jest",
+    "test:jest": "jest bin",
+    "build": "npm run test && npm run build:compile:full && npm run build:copy && npm run uglify && npm run flowgen && npm run apidocs",
+    "build:compile:quick": "tsc",
+    "build:compile:full": "tsc --declaration",
+    "build:copy": "cpx \"bin/**/!(*.test){*.js,*.d.ts}\" \"lib\"",
+    "prettier": "prettier --write \"src/**/*.ts\"",
+    "uglify": "uglifyjs \"lib/di.js\" -c -m --toplevel -o \"lib/di.min.js\"",
+    "flowgen": "flowgen lib/di.d.ts -o lib/di.min.js.flow",
+    "apidocs": "npm run apidocs:clean && npm run apidocs:typedoc && npm run apidocs:copy && npm run apidocs:tidy",
+    "apidocs:clean": "rm docs -rf && rm docs_bin -rf",
+    "apidocs:typedoc": "typedoc --out docs_bin src/di.ts --excludePrivate --excludeNotExported --excludeExternals ",
+    "apidocs:copy": "npm run apidocs:copy1 && npm run apidocs:copy2",
+    "apidocs:copy1": "cpx docs_bin/modules/_di_.md docs && mv docs/_di_.md docs/di.md",
+    "apidocs:copy2": "cpx docs_bin/interfaces/_di_.dicontext.md docs && mv docs/_di_.dicontext.md docs/dicontext.md",
+    "apidocs:tidy": "npm run apidocs:tidy1 && npm run apidocs:tidy2",
+    "apidocs:tidy1": "line-replace docs/di.md:1 '' && line-replace docs/di.md:3 '' && replace '_di_' 'di' docs/di.md && replace 'di.dicontext' 'dicontext' docs/di.md && replace '../interfaces/' '' docs/di.md",
+    "apidocs:tidy2": "line-replace docs/dicontext.md:1 '' && line-replace docs/dicontext.md:3 '' && replace '_di_' 'di' docs/dicontext.md && replace 'di.dicontext' 'dicontext' docs/dicontext.md"
+  },
+  "keywords": [
+    "di",
+    "dependency",
+    "injection",
+    "dependency injection"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tobes31415/di"
+  },
+  "author": "Jake Tober",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/plugin-proposal-export-default-from": "7.8.3",
+    "@babel/preset-env": "7.8.7",
+    "@typescript-eslint/eslint-plugin": "2.22.0",
+    "@typescript-eslint/parser": "2.22.0",
+    "babel-jest": "25.1.0",
+    "cpx": "1.5.0",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.10.0",
+    "eslint-plugin-prettier": "3.1.2",
+    "flowgen": "1.10.0",
+    "jest": "25.1.0",
+    "line-replace": "1.0.3",
+    "prettier": "1.19.1",
+    "replace": "1.1.5",
+    "typedoc": "^0.16.11",
+    "typedoc-plugin-markdown": "^2.2.17",
+    "typescript": "3.8.3",
+    "uglify-es": "3.3.9"
+  },
+  "dependencies": {}
+}
