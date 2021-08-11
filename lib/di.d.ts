@@ -10,7 +10,7 @@ class Foo {
 }
 
 class Service {
-    stuff() {}
+  stuff() {}
 }
 
 const mockService = new Mock();

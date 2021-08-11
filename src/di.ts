@@ -134,7 +134,7 @@ class DIAdaptiveRootImplementation implements DIContext {
   };
 
   private context() {
-    return currentContext ?? this.defaultRoot;
+    return currentContext || this.defaultRoot;
   };
 }
 
