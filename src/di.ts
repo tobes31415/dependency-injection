@@ -10,7 +10,7 @@ class Foo {
 }
 
 class Service {
-	stuff() {}
+  stuff() {}
 }
 
 const mockService = new Mock();
@@ -36,26 +36,26 @@ export interface DIContext {
    * @param token The token to register the substitution for
    * @param factory A function that will be invoked when resolving the token
    */
-  useFactory(token:any, factory:()=>any): void;
+  useFactory(token: any, factory: () => any): void;
 
   /**
    * Overrides the function used to provide the specified token
    * @param token  The token to register the substitution for
    * @param substitute A class that will be resovled instead of the token
    */
-  useClass(token:any, substitute:any): void;
+  useClass(token: any, substitute: any): void;
 
   /**
    * Overrides the function used to provide the specified token
    * @param token  The token to register the substitution for
    * @param substitute This specific object will be used without changes or being invoked
    */
-  useObject(token:any, substitute: any): void;
+  useObject(token: any, substitute: any): void;
 }
 
 class DIContextImplementation implements DIContext {
-  instances: Map<any,any> = new Map();
-  resolvers: Map<any,(v)=>any> = new Map();
+  instances: Map<any, any> = new Map();
+  resolvers: Map<any, (v) => any> = new Map();
 
   constructor() {
     this.useFactory = this.useFactory.bind(this);
@@ -74,11 +74,11 @@ class DIContextImplementation implements DIContext {
     }
     this.resolvers.set(token, factoryFn);
   }
-  useClass(token:any, substitute:any) {
-    this.useFactory(token, ()=> this.resolve(substitute));
+  useClass(token: any, substitute: any) {
+    this.useFactory(token, () => this.resolve(substitute));
   };
-  useObject(token:any, substitute: any) {
-    this.useFactory(token, ()=> substitute);
+  useObject(token: any, substitute: any) {
+    this.useFactory(token, () => substitute);
   };
 
   resolve(token) {
@@ -116,7 +116,29 @@ class DIContextImplementation implements DIContext {
   }
 }
 
-const root: DIContext = new DIContextImplementation();
+class DIAdaptiveRootImplementation implements DIContext {
+  private defaultRoot = new DIContextImplementation();
+
+  useFactory(token, factoryFn) {
+    return this.context().useFactory(token, factoryFn);
+  }
+  useClass(token: any, substitute: any) {
+    return this.context().useClass(token, substitute);
+  };
+  useObject(token: any, substitute: any) {
+    return this.context().useObject(token, substitute);
+  };
+
+  resolve(token) {
+    return this.context().resolve(token);
+  };
+
+  private context() {
+    return currentContext ?? this.defaultRoot;
+  };
+}
+
+const root: DIContext = new DIAdaptiveRootImplementation();
 
 /**
  * Creates a new dependency injection root with no resolved instances.  Use for unit testing to provide mocks

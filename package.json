@@ -1,6 +1,6 @@
 {
   "name": "@tobes31415/dependency-injection",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Tiny dependency injection",
   "main": "lib/di-cjs.min.js",
   "types": "lib/di.d.ts",
