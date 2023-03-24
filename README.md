@@ -1,5 +1,5 @@
 # DI
-A tiny library to handle basic dependency injection
+Dependency-injection is a tiny framework agnostic library to handle dependency injection in your javascript projects.  It Facilitates unit and A/B testing and improves the team's ability to rapidly develop in parallel by enabling mocks to be transparently inserted when needed and replaced later. 
 
 [View API Docs](docs/di.md)
 
